@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kantin Sekolah</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f1f6f4;--surface:#fff;--ink:#12343b;--muted:#5b7479;--line:#d5e2de;--brand:#12343b;--brand-ink:#fff;--accent:#ffd23f;--accent-ink:#12343b;--danger:#c8421f;--ok:#1f8a5b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1f23;--surface:#16323a;--ink:#eaf3f1;--muted:#9bb5b9;--line:#26474f;--brand:#ffd23f;--brand-ink:#12343b;--accent:#ffd23f;--accent-ink:#12343b;--danger:#ff8a68;--ok:#5fd6a0}}
+:root[data-theme="dark"]{--bg:#0e1f23;--surface:#16323a;--ink:#eaf3f1;--muted:#9bb5b9;--line:#26474f;--brand:#ffd23f;--brand-ink:#12343b;--accent:#ffd23f;--accent-ink:#12343b;--danger:#ff8a68;--ok:#5fd6a0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "DM Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.15;margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{background:var(--brand);color:var(--brand-ink);padding:28px 20px 24px}
+header .in{max-width:1100px;margin:auto}
+header h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800}
+header p{margin:8px 0 0;max-width:46ch;opacity:.85}
+main{max-width:1100px;margin:auto;padding:20px;display:grid;gap:24px;grid-template-columns:1fr}
+@media(min-width:900px){main{grid-template-columns:1fr 340px;align-items:start}aside{position:sticky;top:16px}}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.tools input{flex:1 1 200px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.item .em{font-size:2.6rem;line-height:1}
+.item h3{font-size:1.1rem}
+.item small{color:var(--muted)}
+.item .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px}
+.price{font-weight:700}
+.add{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer}
+.add:active{transform:scale(.96)}
+.cart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.cart h2{font-size:1.3rem;margin-bottom:10px}
+.line{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:none;cursor:pointer}
+.empty{color:var(--muted);padding:12px 0}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:1.2rem;padding:14px 0 8px}
+label.f{display:block;font-size:.9rem;color:var(--muted);margin:10px 0 4px}
+.cart input[type=text],.cart input[type=number],dialog input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg)}
+.pay{display:grid;gap:8px;margin-top:6px}
+.pay label{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.pay label:has(input:checked){border-color:var(--ink);background:var(--bg)}
+.go{width:100%;margin-top:14px;background:var(--brand);color:var(--brand-ink);border:0;border-radius:12px;padding:14px;font-weight:700;cursor:pointer}
+.go:disabled{opacity:.4;cursor:not-allowed}
+dialog{border:0;border-radius:18px;padding:24px;width:min(420px,92vw);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h2{font-size:1.4rem;margin-bottom:8px}
+.qr{display:block;margin:12px auto;width:200px;height:200px;background:#fff;padding:8px;border-radius:10px}
+.err{color:var(--danger);min-height:1.4em;font-size:.9rem}
+.ok{color:var(--ok)}
+.queue{font:800 4rem/1 "Bricolage Grotesque",sans-serif;text-align:center;margin:10px 0}
+.btns{display:flex;gap:10px;margin-top:14px}
+.btns button{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:none;cursor:pointer;font-weight:700}
+.btns .main{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.note{font-size:.85rem;color:var(--muted)}
+@media(prefers-reduced-motion:no-preference){.item{transition:border-color .15s}.item:hover{border-color:var(--ink)}}
+</style>
+</head>
+<body>
+<header><div class="in">
+<h1>Kantin Sekolah</h1>
+<p>Pilih makanan dan minuman, lalu bayar dengan QRIS, kartu debit, atau tunai.</p>
+</div></header>
+
+<main>
+<section aria-label="Menu">
+<div class="tools">
+<input id="q" type="search" placeholder="Cari menu, misalnya bakso" aria-label="Cari menu">
+</div>
+<div class="chips" id="chips" role="group" aria-label="Kategori"></div>
+<div class="grid" id="grid" style="margin-top:16px"></div>
+</section>
+
+<aside>
+<form class="cart" id="cart" onsubmit="return false">
+<h2>Pesanan kamu</h2>
+<div id="lines"></div>
+<div class="total"><span>Total</span><span id="total">Rp0</span></div>
+<label class="f" for="nama">Nama dan kelas</label>
+<input type="text" id="nama" placeholder="Contoh: Rani, XI IPA 2" maxlength="40" autocomplete="off">
+<label class="f">Metode pembayaran</label>
+<div class="pay">
+<label><input type="radio" name="m" value="qris" checked> QRIS</label>
+<label><input type="radio" name="m" value="debit"> Kartu debit</label>
+<label><input type="radio" name="m" value="tunai"> Tunai</label>
+</div>
+<button class="go" id="go" disabled>Bayar sekarang</button>
+</form>
+</aside>
+</main>
+
+<dialog id="dlg"><div id="dbody"></div></dialog>
+
+<script>
+const MENU=[
+{id:1,n:"Nasi goreng",c:"Makanan berat",p:12000,e:"🍛",d:"Telur mata sapi, kerupuk"},
+{id:2,n:"Mie ayam",c:"Makanan berat",p:11000,e:"🍜",d:"Ayam kecap, pangsit"},
+{id:3,n:"Bakso",c:"Makanan berat",p:12000,e:"🍲",d:"Bakso sapi, mie, sayur"},
+{id:4,n:"Nasi ayam geprek",c:"Makanan berat",p:15000,e:"🍗",d:"Sambal level pilihan"},
+{id:5,n:"Gado-gado",c:"Makanan berat",p:10000,e:"🥗",d:"Sayur, lontong, bumbu kacang"},
+{id:6,n:"Roti bakar",c:"Camilan",p:8000,e:"🍞",d:"Cokelat atau keju"},
+{id:7,n:"Gorengan",c:"Camilan",p:2000,e:"🍤",d:"Harga per potong"},
+{id:8,n:"Batagor",c:"Camilan",p:9000,e:"🥟",d:"Saus kacang"},
+{id:9,n:"Es teh manis",c:"Minuman",p:4000,e:"🧋",d:"Dingin segar"},
+{id:10,n:"Jus jeruk",c:"Minuman",p:8000,e:"🍊",d:"Tanpa pengawet"},
+{id:11,n:"Air mineral",c:"Minuman",p:3000,e:"💧",d:"Botol 600 ml"},
+{id:12,n:"Puding cokelat",c:"Camilan",p:5000,e:"🍮",d:"Vla vanila"}
+];
+const rp=n=>"Rp"+n.toLocaleString("id-ID");
+const $=id=>document.getElementById(id);
+let cart={},cat="Semua",kw="",queueNo=0;
+const cats=["Semua",...new Set(MENU.map(m=>m.c))];
+
+function renderChips(){
+ $("chips").innerHTML="";
+ cats.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=c;
+ b.setAttribute("aria-pressed",c===cat);b.onclick=()=>{cat=c;renderChips();renderMenu()};$("chips").append(b)});
+}
+function renderMenu(){
+ const list=MENU.filter(m=>(cat==="Semua"||m.c===cat)&&m.n.toLowerCase().includes(kw));
+ $("grid").innerHTML="";
+ if(!list.length){$("grid").innerHTML='<p class="empty">Menu tidak ditemukan. Coba kata kunci lain.</p>';return}
+ list.forEach(m=>{const el=document.createElement("div");el.className="item";
+ el.innerHTML=`<div class="em" aria-hidden="true">${m.e}</div><h3>${m.n}</h3><small>${m.d}</small>
+ <div class="row"><span class="price">${rp(m.p)}</span><button type="button" class="add" aria-label="Tambah ${m.n}">Tambah</button></div>`;
+ el.querySelector(".add").onclick=()=>{cart[m.id]=(cart[m.id]||0)+1;renderCart()};
+ $("grid").append(el)});
+}
+function total(){return Object.entries(cart).reduce((s,[id,q])=>s+MENU.find(m=>m.id==id).p*q,0)}
+function renderCart(){
+ const ids=Object.keys(cart);
+ $("lines").innerHTML=ids.length?"":'<p class="empty">Belum ada pesanan. Pilih menu di sebelah kiri.</p>';
+ ids.forEach(id=>{const m=MENU.find(x=>x.id==id),q=cart[id];const d=document.createElement("div");d.className="line";
+ d.innerHTML=`<strong>${m.n}</strong><span class="price">${rp(m.p*q)}</span>
+ <span class="note">${rp(m.p)}</span>
+ <div class="qty"><button type="button" aria-label="Kurangi ${m.n}">−</button><span>${q}</span><button type="button" aria-label="Tambah ${m.n}">+</button></div>`;
+ const [a,b]=d.querySelectorAll("button");
+ a.onclick=()=>{if(--cart[id]<=0)delete cart[id];renderCart()};
+ b.onclick=()=>{cart[id]++;renderCart()};
+ $("lines").append(d)});
+ $("total").textContent=rp(total());
+ $("go").disabled=!ids.length;
+}
+function qrSvg(seed){
+ const N=25,s=8;let x=seed*2654435761%4294967296||1;
+ const r=()=>(x^=x<<13,x^=x>>>17,x^=x<<5,(x>>>0)%100<48);
+ const fin=(i,j)=>{const t=(a,b)=>a<7&&b<7;return t(i,j)||t(N-1-i,j)||t(i,N-1-j)};
+ const ring=(i,j)=>{const a=Math.min(i,N-1-i,j,N-1-j);const ii=i<7?i:i>=N-7?N-1-i:i,jj=j<7?j:j>=N-7?N-1-j:j;
+  const m=Math.max(Math.abs(ii-3),Math.abs(jj-3));return m!==2&&m<=3};
+ let out=`<svg class="qr" viewBox="0 0 ${N*s} ${N*s}" role="img" aria-label="Contoh kode QRIS">`;
+ for(let i=0;i<N;i++)for(let j=0;j<N;j++){const on=fin(i,j)?ring(i,j):r();
+  if(on)out+=`<rect x="${j*s}" y="${i*s}" width="${s}" height="${s}" fill="#000"/>`}
+ return out+"</svg>";
+}
+function show(html){$("dbody").innerHTML=html;if(!$("dlg").open)$("dlg").showModal()}
+function close(){$("dlg").close()}
+
+$("go").onclick=()=>{
+ const nama=$("nama").value.trim(),t=total(),m=document.querySelector('input[name=m]:checked').value;
+ if(!nama){$("nama").focus();$("nama").placeholder="Isi nama dan kelas dulu";return}
+ if(m==="qris"){
+  show(`<h2>Bayar dengan QRIS</h2><p>Scan kode ini dengan e-wallet atau mobile banking.</p>${qrSvg(t)}
+  <p style="text-align:center"><strong>${rp(t)}</strong></p>
+  <p class="note">Ini kode contoh. Ganti dengan gambar QRIS resmi kantin sekolah kamu.</p>
+  <div class="btns"><button id="x">Batal</button><button class="main" id="y">Saya sudah bayar</button></div>`);
+  $("x").onclick=close;$("y").onclick=()=>done(nama,t,"QRIS");
+ }else if(m==="debit"){
+  show(`<h2>Bayar dengan kartu debit</h2><p>Tunjukkan nomor antrean nanti ke kasir, lalu gesek atau tap kartu di mesin EDC.</p>
+  <p><strong>Total: ${rp(t)}</strong></p><p class="note">Jangan ketik nomor kartu atau PIN di halaman ini.</p>
+  <div class="btns"><button id="x">Batal</button><button class="main" id="y">Lanjut ke kasir</button></div>`);
+  $("x").onclick=close;$("y").onclick=()=>done(nama,t,"Kartu debit (bayar di kasir)");
+ }else{
+  show(`<h2>Bayar tunai</h2><p><strong>Total: ${rp(t)}</strong></p>
+  <label class="f" for="uang">Uang yang kamu bawa (Rp)</label><input type="number" id="uang" min="0" step="500" inputmode="numeric">
+  <p class="err" id="e" aria-live="polite"></p>
+  <div class="btns"><button id="x">Batal</button><button class="main" id="y">Konfirmasi</button></div>`);
+  $("x").onclick=close;
+  $("uang").oninput=()=>{const u=+$("uang").value;$("e").className="err"+(u>=t?" ok":"");
+   $("e").textContent=u>=t?"Kembalian: "+rp(u-t):u?"Uang kurang "+rp(t-u):""};
+  $("y").onclick=()=>{const u=+$("uang").value;if(u<t){$("e").textContent="Uang belum cukup untuk total "+rp(t);return}
+   done(nama,t,"Tunai (kembalian "+rp(u-t)+")")};
+ }
+};
+function done(nama,t,metode){
+ queueNo++;
+ const rows=Object.entries(cart).map(([id,q])=>{const m=MENU.find(x=>x.id==id);return `<li>${q}× ${m.n}</li>`}).join("");
+ show(`<h2>Pesanan diterima</h2><p class="note">Nomor antrean</p><div class="queue">${String(queueNo).padStart(3,"0")}</div>
+ <p><strong id="rn"></strong></p><ul>${rows}</ul><p>Total ${rp(t)}<br><span class="note" id="rm"></span></p>
+ <div class="btns"><button class="main" id="y">Pesan lagi</button></div>`);
+ $("rn").textContent=nama;$("rm").textContent=metode;
+ cart={};$("nama").value="";renderCart();
+ $("y").onclick=close;
+}
+$("q").oninput=e=>{kw=e.target.value.toLowerCase().trim();renderMenu()};
+renderChips();renderMenu();renderCart();
+</script>
+</body>
+</html>
